@@ -1,20 +1,37 @@
 .ocid-form-section {
-    margin-bottom: 20px;
-    
-    font-size: 14pt;
+    display: flex;
+    padding: 10px;
+    font-size: 12pt;
+    p {margin: 0 0 0 34px;}
 
-    p {margin: 0};
+    .subsection {
+        width: 350px;
+        position: relative;
+        top: -6px;
+    }
 
     .checkbox {
+        position:relative;
+        top: -20%;
+        left: -5px;
         scale: 1.5;
     }
 
     select {
         margin-left:8px;
-        width: calc(100% - 30px);        
-        font-size: 12pt;
+        width: calc(100% - 30px);
+        font-size: 10.5pt;
         position: relative;
         top: 2px;
         padding: 4px;
     }
+
+    button {
+        width: 100px;
+        margin-right: 20px;
+    }
+}
+
+.ocid-form-section.odd {
+    background-color: #eee;
 }

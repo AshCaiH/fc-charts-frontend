@@ -7,9 +7,7 @@ export const OCIDForm = () => {
 
     return (
         <form>
-            {
-                sortedData.map((item) => <OCIDFormSection item={item}/>)
-            }
+            {sortedData.map((item, index) => <OCIDFormSection key={item.game.id} index={index} item={item}/>)}
         </form>
     )
 
