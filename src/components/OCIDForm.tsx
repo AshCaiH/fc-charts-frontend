@@ -1,29 +1,16 @@
-import { FC, createElement } from "preact/compat";
 import { testData } from "../testdata/getocids";
+import OCIDFormSection from "./OCIDFormSection";
 
-interface Props {
-    item: {
-        game: string;
-        results: {
-            id: number;
-            name: string;
-            dist: number;
-        }[];
-    }
-}
-
-export const OCIDForm:FC<Props> = (props) => {
-    const {game, results} = props.item;
-    const almostCertain = (results[0].dist == 0)
+export const OCIDForm = () => {
 
     return (
-        <>
-            <p>{game}</p>
-            <select>
-                {results.map((result) => <option value={result.name}>{result.name}</option>)}
-            </select>
-            {createElement('input',{type: 'checkbox', defaultChecked: almostCertain})}
-        </>
+        <form>
+            {
+                testData.extra.results.map((item) => {
+                    return <OCIDFormSection item={item}/>
+                })
+            }
+        </form>
     )
 
 }
