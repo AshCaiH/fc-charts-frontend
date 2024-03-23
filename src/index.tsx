@@ -2,11 +2,12 @@ import { render } from 'preact';
 import { LocationProvider, Router, Route } from 'preact-iso';
 
 import './style.css';
+import UpdateOCIDs from './components/UpdateOCIDs';
 
 export function App() {
 	return (
 		<>
-
+			<UpdateOCIDs />
 		</>
 	);
 
