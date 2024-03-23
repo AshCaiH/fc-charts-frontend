@@ -19,10 +19,10 @@ export const OCIDFormSection:FC<Props> = (props) => {
     return (
         <div class="ocid-form-section">
             <p>{game}</p>
+            {createElement('input',{type: 'checkbox', class: "checkbox", defaultChecked: almostCertain})}
             <select>
                 {results.map((result) => <option value={result.name}>{result.name}</option>)}
             </select>
-            {createElement('input',{type: 'checkbox', defaultChecked: almostCertain})}
         </div>
     )
 
