@@ -2,11 +2,12 @@ import { render } from 'preact';
 import { LocationProvider, Router, Route } from 'preact-iso';
 
 import './style.css';
+import OCIDForm from './components/OCIDForm';
 
 export function App() {
 	return (
 		<>
-
+			<OCIDForm />
 		</>
 	);
 
