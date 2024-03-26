@@ -7,8 +7,10 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
+		"chart.js": "^4.4.2",
 		"preact": "^10.13.1",
-		"preact-iso": "^2.4.0"
+		"preact-iso": "^2.4.0",
+		"react-chartjs-2": "^5.2.0"
 	},
 	"devDependencies": {
 		"@preact/preset-vite": "^2.5.0",
