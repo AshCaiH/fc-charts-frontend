@@ -1,25 +1,11 @@
 import chartData from "../testdata/chartdata.json"
 import { Line } from "react-chartjs-2";
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-} from 'chart.js';
+import "chartjs-adapter-date-fns";
+import {Chart as ChartJS,CategoryScale,LinearScale,PointElement,LineElement,
+    Title,Tooltip,Legend,TimeScale} from 'chart.js';
 
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend
-);
+ChartJS.register(CategoryScale,LinearScale,PointElement,LineElement,Title,
+    Tooltip,Legend,TimeScale);
 
 const rawData = chartData.extra.result;
 const parsedData : any[] = [];
@@ -91,8 +77,11 @@ export const options:any = {
     },
     scales: {
         x: {
-        type: 'linear',
-        position: 'bottom'
+            type: "time",
+            time: {
+                unit: "month"
+            },
+            position: "bottom",
         }
     }
 };
