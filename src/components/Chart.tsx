@@ -11,16 +11,6 @@ import {
     Legend,
 } from 'chart.js';
 
-
-const allReviews : {date: number, game: string, score: number, runningScore: number }[] = chartData.map(game => game.data.map(review => {
-    return {
-        date: Date.parse(review.date),
-        game: game.game,
-        score: review.fcAverage,
-        runningScore: 0,
-    }
-})).flat();
-
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -31,20 +21,44 @@ ChartJS.register(
     Legend
 );
 
-export const myData = chartData[1].data.map(item => {return {x: new Date(item.date), y: item.fcAverage}});
+const rawData = chartData.extra.result;
+const parsedData : any[] = [];
 
-const runningGameScore = {}
-chartData.map(item => runningGameScore[item.game] = 0);
-console.log(runningGameScore);
+rawData.map(user => {
 
-allReviews.sort((a, b) => a.date - b.date);
+    const currentGameScores: { [key: string]: number } = {};
 
-allReviews.forEach((item, index) => {
-    runningGameScore[item.game] = item.score;
-    allReviews[index]["runningScore"] = Object.values(runningGameScore).reduce((prev:number, now:number) => {return prev + now}, 0) 
+    user.games.map(game => currentGameScores[game.game] = 0);
+
+    const flatReviews = user.games.map(game => game.data.map(review => {
+        return {
+            date: Date.parse(review.date),
+            game: game.game,
+            score: review.fcAverage,
+            currentUserScore: 0,
+        }
+    })).flat();
+
+    flatReviews.sort((a, b) => a.date - b.date);
+
+    // Each review tracks the user's total score at the given point in time.
+    flatReviews.forEach((review, index) => {
+        currentGameScores[review.game] = review.score;
+        flatReviews[index].currentUserScore = Object.values(currentGameScores).reduce(
+            (prev: number, now: number) => prev + now, 0
+        )
+    });
+
+
+
+    parsedData.push({
+        label: user.user,
+        data: flatReviews.map(item => {return {x: new Date(item.date), y: item.currentUserScore}}),
+        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+    })
 });
 
-console.log(allReviews);
 
 export const options:any = {
     responsive: true,
@@ -68,18 +82,9 @@ export const options:any = {
 };
 
 
-// const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-
 export const data = {
     // labels,
-    datasets: [
-        {
-            label: 'Username',
-            data: allReviews.map(item => {return {y: item.runningScore, x: new Date(item.date)}}),
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        },
-    ],
+    datasets: parsedData
 };
 
 export const MyChart = () => {
