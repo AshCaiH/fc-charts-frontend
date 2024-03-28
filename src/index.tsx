@@ -2,12 +2,13 @@ import { render } from 'preact';
 import { LocationProvider, Router, Route } from 'preact-iso';
 
 import './style.css';
-import OCIDForm from './components/OCIDForm';
+// import OCIDForm from './components/OCIDForm';
+import Chart from './components/Chart';
 
 export function App() {
 	return (
 		<>
-			<OCIDForm />
+			<Chart />
 		</>
 	);
 
