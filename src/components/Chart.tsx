@@ -11,7 +11,7 @@ ChartJS.register(CategoryScale,LinearScale,PointElement,LineElement,Title,
 const rawData = chartData.extra.result;
 const parsedData : any[] = [];
 
-const borderColours = ["#003f5c","#1c4771","#3d4d83","#615190","#865196","#ab5094","#cc508b","#e7537b","#fb5f67","#ff724e","#ff8b32","#ffa600"]
+const borderColours = ["#04B0EA","#0389B6","#3d4d83","#615190","#865196","#ab5094","#cc508b","#e7537b","#fb5f67","#ff724e","#ff8b32","#ffa600"]
 
 rawData.map(user => {
 
@@ -20,10 +20,12 @@ rawData.map(user => {
     user.games.map(game => currentGameScores[game.game] = 0);
 
     const flatReviews = user.games.map(game => game.data.map(review => {
+        const modifier: 1 | -1 = (game.counterpicked ? -1 : 1)
+
         return {
             date: Date.parse(review.date),
             game: game.game,
-            score: review.fcAverage,
+            score: review.fcAverage * modifier,
             currentUserScore: 0,
         }
     })).flat();
@@ -44,7 +46,8 @@ rawData.map(user => {
         label: user.user,
         data: flatReviews.map(item => {return {x: new Date(item.date), y: item.currentUserScore}}),
         borderColor: (ctx) => borderColours[ctx.index],
-        pointBackgroundColor: "#ff6384)",
+        backgroundColor: (ctx) => borderColours[ctx.index],
+        pointBackgroundColor: "#ff6384",
         borderWidth: 2,
         pointRadius: 0,
         stepped: "before",
@@ -62,10 +65,13 @@ parsedData.sort((a, b) =>
 parsedData.map((item, index) => {
     item.data[0].x = new Date(2024, 0, 1);
     item.data[0].y = 0;
-    item.data.push({x: Date.now(), y: item.data[item.data.length-1].y, lineColour: borderColours[index]})
+    item.data.push({x: new Date(2024, 11, 31), y: item.data[item.data.length-1].y, lineColour: borderColours[index]})
 })
 
 let index = 0;
+
+ChartJS.defaults.borderColor = '#FFF2';
+ChartJS.defaults.color = '#FFFC';
 
 export const options:any = {
     responsive: true,
@@ -94,14 +100,16 @@ export const options:any = {
         },
         title: {
             display: true,
-            text: 'Chart.js Line Chart',
+            text: 'Fantasy Critic Chart',
         },
     },
     scales: {
         x: {
             type: "time",
             time: {
-                unit: "month"
+                displayFormats: {
+                    month: 'MMM'
+                }
             },
             position: "bottom",
         }
