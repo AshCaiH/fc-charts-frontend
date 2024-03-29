@@ -40,11 +40,11 @@ rawData.map(user => {
         )
     });
 
-
+    const finalScore = flatReviews[flatReviews.length-1].currentUserScore
 
     parsedData.push({
-        label: user.user,
         data: flatReviews.map(item => {return {x: new Date(item.date), y: item.currentUserScore}}),
+        label: `${finalScore.toFixed(2)} - ${user.user}`,
         borderColor: (ctx) => borderColours[ctx.index],
         backgroundColor: (ctx) => borderColours[ctx.index],
         pointBackgroundColor: "#ff6384",
@@ -54,9 +54,6 @@ rawData.map(user => {
     })
 });
 
-console.log(parsedData);
-
-
 parsedData.sort((a, b) => 
     a.data[a.data.length-1].y -
     b.data[b.data.length-1].y
@@ -65,13 +62,18 @@ parsedData.sort((a, b) =>
 parsedData.map((item, index) => {
     item.data[0].x = new Date(2024, 0, 1);
     item.data[0].y = 0;
-    item.data.push({x: new Date(2024, 11, 31), y: item.data[item.data.length-1].y, lineColour: borderColours[index]})
+    item.data.push({
+        x: new Date(2024, 11, 31), 
+        y: item.data[item.data.length-1].y, 
+        lineColour: borderColours[index],
+        position: index,
+    })
 })
-
-let index = 0;
 
 ChartJS.defaults.borderColor = '#FFF2';
 ChartJS.defaults.color = '#FFFC';
+
+const datapoints: any[] = [];
 
 export const options:any = {
     responsive: true,
@@ -79,8 +81,9 @@ export const options:any = {
     animations: false,
     layout: {
         padding: {
-            right: 256,
-            top: 1
+            right: 225,
+            left: 20,
+            top: 10
         },
     },
     plugins: {        
@@ -88,15 +91,25 @@ export const options:any = {
             align: 'right',
             // display: 'auto',
             color: (ctx) => {
-                console.log(ctx);
                 return ctx.dataset.data[ctx.dataset.data.length-1].lineColour},
             display: (ctx) => ctx.dataIndex === ctx.dataset.data.length - 1,
             formatter: (v, ctx) => ctx.dataset.label,
-            offset: 8,
+            offset: (ctx) => {
+                const chart = ctx.chart;
+                const meta = chart.getDatasetMeta(ctx.datasetIndex);
+                const model = meta.data[ctx.dataIndex];
+                datapoints.push(model);
+                const position = ctx.dataset.data[ctx.dataset.data.length-1].position;
+                if (position == parsedData.length-1) resolveOverlaps();
+                return 2;
+            },
             font: {
                 weight: 300,
                 size: 16
             },
+        },
+        legend: {
+            display: false,
         },
         title: {
             display: true,
@@ -116,14 +129,38 @@ export const options:any = {
     }
 };
 
+const resolveOverlaps = () => {
+// Resolve overlapping labels
+    let overlaps = false;
+
+    do {
+        console.log(datapoints);
+        overlaps = false;
+
+        datapoints.map((dp1, index) => {
+            console.log("ding");
+            if (dp1 === datapoints[datapoints.length-1]) {
+                console.log(datapoints.indexOf(dp1));
+                return;
+            }
+            const dp2 = datapoints[index+1];
+            console.log(dp2.y - dp1.y);
+
+            while (dp1.y - dp2.y < 20) {
+                overlaps = true;
+                dp1.y += 1;
+                dp2.y -= 1;
+            }
+        })
+
+    } while (overlaps)
+}
+
 
 export const data = {
-    // labels,
     datasets: parsedData,    
     tension: 0.1,
 };
-
-// borderColor: ["#003f5c","#2f4b7c","#665191","#a05195","#d45087","#f95d6a","#ff7c43","#ffa600", "#ffc800", "#ffe900"],
 
 export const MyChart = () => {
     return <Line options={options} plugins={[ChartDataLabels]} data={data} />;
