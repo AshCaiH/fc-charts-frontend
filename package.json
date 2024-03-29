@@ -9,6 +9,7 @@
 	"dependencies": {
 		"chart.js": "^4.4.2",
 		"chartjs-adapter-date-fns": "^3.0.0",
+		"chartjs-plugin-datalabels": "^2.2.0",
 		"date-fns": "^3.6.0",
 		"preact": "^10.13.1",
 		"preact-iso": "^2.4.0",
