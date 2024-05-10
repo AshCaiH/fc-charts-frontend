@@ -70,8 +70,8 @@ parsedData.map((item, index) => {
     })
 })
 
-ChartJS.defaults.borderColor = '#FFF2';
-ChartJS.defaults.color = '#FFFC';
+ChartJS.defaults.borderColor = '#00000015';
+ChartJS.defaults.color = '#796262';
 
 const datapoints: any[] = [];
 
