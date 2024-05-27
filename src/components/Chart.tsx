@@ -17,14 +17,16 @@ rawData.map(user => {
 
     const currentGameScores: { [key: string]: number } = {};
 
-    user.games.map(game => currentGameScores[game.game] = 0);
+    user.games.map(game => currentGameScores[game.title] = 0);
+
+    user.games = user.games.filter(game => game.isReleased);
 
     const flatReviews = user.games.map(game => game.data.map(review => {
         const modifier: 1 | -1 = (game.counterpicked ? -1 : 1)
 
         return {
             date: Date.parse(review.date),
-            game: game.game,
+            game: game.title,
             score: review.fcAverage * modifier,
             currentUserScore: 0,
         }
