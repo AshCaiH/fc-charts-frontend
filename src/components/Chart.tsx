@@ -13,11 +13,10 @@ const chartData = await fetch(`${import.meta.env.VITE_SERVER_URL}/makeCharts`, {
     headers: {"Content-Type": "application/json"},
 }).then(response => response.json());
 
-const rawData = chartData.extra.result;
+const rawData = chartData.extra.result.filter(data => data.user != "<Deleted>");
 const parsedData : any[] = [];
 
 const borderColours = ["#04B0EA","#0389B6","#3d4d83","#615190","#865196","#ab5094","#cc508b","#e7537b","#fb5f67","#ff724e","#ff8b32","#ffa600"]
-
 
 rawData.map(user => {
     const currentGameScores: { [key: string]: number } = {};
@@ -141,17 +140,13 @@ const resolveOverlaps = () => {
     let overlaps = false;
 
     do {
-        console.log(datapoints);
         overlaps = false;
 
         datapoints.map((dp1, index) => {
-            console.log("ding");
             if (dp1 === datapoints[datapoints.length-1]) {
-                console.log(datapoints.indexOf(dp1));
                 return;
             }
             const dp2 = datapoints[index+1];
-            console.log(dp2.y - dp1.y);
 
             while (dp1.y - dp2.y < 20) {
                 overlaps = true;
