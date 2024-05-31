@@ -13,11 +13,10 @@ const chartData = await fetch(`${import.meta.env.VITE_SERVER_URL}/makeCharts`, {
     headers: {"Content-Type": "application/json"},
 }).then(response => response.json());
 
-const rawData = chartData.extra.result;
+const rawData = chartData.extra.result.filter(data => data.user != "<Deleted>");
 const parsedData : any[] = [];
 
 const borderColours = ["#04B0EA","#0389B6","#3d4d83","#615190","#865196","#ab5094","#cc508b","#e7537b","#fb5f67","#ff724e","#ff8b32","#ffa600"]
-
 
 rawData.map(user => {
     const currentGameScores: { [key: string]: number } = {};
