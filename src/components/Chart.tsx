@@ -141,12 +141,10 @@ const resolveOverlaps = () => {
     let overlaps = false;
 
     do {
-        console.log(datapoints);
         overlaps = false;
 
         datapoints.map((dp1, index) => {
             if (dp1 === datapoints[datapoints.length-1]) {
-                console.log(datapoints.indexOf(dp1));
                 return;
             }
             const dp2 = datapoints[index+1];
