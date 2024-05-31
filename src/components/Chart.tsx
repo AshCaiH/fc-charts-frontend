@@ -145,13 +145,11 @@ const resolveOverlaps = () => {
         overlaps = false;
 
         datapoints.map((dp1, index) => {
-            console.log("ding");
             if (dp1 === datapoints[datapoints.length-1]) {
                 console.log(datapoints.indexOf(dp1));
                 return;
             }
             const dp2 = datapoints[index+1];
-            console.log(dp2.y - dp1.y);
 
             while (dp1.y - dp2.y < 20) {
                 overlaps = true;
